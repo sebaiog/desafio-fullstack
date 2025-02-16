@@ -1,0 +1,125 @@
+openapi: 3.0.0
+info:
+  title: API de Usuarios
+  version: 1.0
+  description: API RESTful para la gestión de usuarios
+
+servers:
+  - url: http://localhost:8181/api  # La URL base de tu API
+
+paths:
+  /usuarios:
+    get:
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+    post:
+      summary: Crear un nuevo usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+
+  /usuarios/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del usuario a obtener
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuario no encontrado
+    put:
+      summary: Actualizar un usuario existente
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del usuario a actualizar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuario no encontrado
+    delete:
+      summary: Eliminar un usuario
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del usuario a eliminar
+      responses:
+        '204':
+          description: Usuario eliminado exitosamente
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID del usuario
+          readOnly: true  # No se permite modificar el ID
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        rut:
+          type: integer
+        dv:
+          type: string
+        fechaNacimiento:
+          type: string
+          format: date
+        correoElectronico:
+          type: string
+          format: email
+        contrasena:
+          type: string
+      required:  # Indica los campos obligatorios
+        - nombres
+        - apellidos
+        - rut
+        - dv
+        - fechaNacimiento
+        - correoElectronico
+        - contrasena
